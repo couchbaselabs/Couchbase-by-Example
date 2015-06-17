@@ -31,10 +31,11 @@ func main() {
 
 		body, _ := ioutil.ReadAll(r.Body)
 		json.Unmarshal(body, &data)
-		log.Printf("Querying user Profiles subscribed to %s", data["topic"].(string))
 
-		var stringUrl string = "http://localhost:4985/db/_design/extras/_view/user_topics?key=\"design\""
+		topic := data["topic"].(string)
+		log.Printf("Querying user Profiles subscribed to %s", topic)
 
+		var stringUrl string = fmt.Sprintf("http://localhost:4985/db/_design/extras/_view/user_topics?key=\"%s\"", topic)
 		res, err := http.Get(stringUrl)
 
 		if err != nil {
