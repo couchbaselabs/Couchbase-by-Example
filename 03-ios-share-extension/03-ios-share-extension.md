@@ -72,7 +72,7 @@ You can find the Sync Gateway binary in the `bin` folder and examples of configu
 
 	$ cp /Downloads/couchbase-sync-gateway/examples/admin_party.json /path/to/proj/sync-gateway-config.json
 
-Each team will be represented by a channel. The channel name will be the team name. Channels are a convenient way to tag documents and by giving users access to a set of channels, you can add fine grained access control. In this tutorial, you will use channels exclusively with the GUEST account (all unauthorised requests made to Sync Gateway). In a full featured application, you would likely give each user access to channels through the Sync Function.
+Each team will be represented by a channel. The channel name will be the team name. Channels are a convenient way to tag documents and by giving users access to a set of channels, you can add fine grained access control. In this tutorial, you will use channels exclusively with the GUEST account (all unauthorised requests made to Sync Gateway). In a full featured application, you would likely give each user access to channels in the Sync Function.
 
 Change the configuration file to declare the list of channels, i.e. teams:
 
@@ -101,15 +101,15 @@ Now you can display the list of teams in the share extensions by simply using `N
 
 # Populating TeamPickerViewController
 
-In the `ViewDidLoad` method of `ShareViewController`, make a GET request to `http://localhost:4984/db/_session`. Use the Swift Playground attached to this project for hints on to make that request:
+In the `ViewDidLoad` method of `ShareViewController`, make a GET request to `http://localhost:4984/db/_session`. Use the Swift Playground attached to this project for hints on how to make that request:
 
-> http://google.com
+> ./Playgrounds/REST_GET_channels
 
 Pass the result to a `teams` property (of type `[String]`) on the View Controller and replace the required `UITableViewDataSource` methods:
 
 - `tableView:numberOfSectionsInTableView:` should return 1
-- `tableView:numberOfRowsInSection` should return the number of teams
-- `tableView:cellForRowAtIndexPath:` should set the `textLabel`’s text property a team name for each row:
+- `tableView:numberOfRowsInSection:` should return the number of teams
+- `tableView:cellForRowAtIndexPath:` should set the `textLabel`’s text property to a team name for each row:
 
 	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 	    var cell: UITableViewCell? = tableView.dequeueReusableCellWithIdentifier("TeamCell") as? UITableViewCell
@@ -126,7 +126,7 @@ Run the extension and you should see the list of teams:
 
 ![][image-8]
 
-Now you will learn how to pass back the selected team to the ShareViewController through a protocol. Above the class definition of Table View in `TeamTableViewController.swift`, add a protocol:
+Now you will learn how to pass back the selected team to the ShareViewController using a protocol. Above the class definition of Table View in `TeamTableViewController.swift`, add a protocol:
 
 	protocol TeamViewProtocol {
 	    func sendingViewController(viewController: TeamTableViewController, sentItem: String)
@@ -159,7 +159,7 @@ In the next section, you will save the document to Sync Gateway when the `didSel
 
 # Saving the Pick document
 
-The final step is to save the document to Sync Gateway when the post button is pressed. This time, you will use `NSURLSession` to make a POST request to `http://localhost:4984/db/` with track name and team name:
+The final step is to save the document to Sync Gateway when the post button is pressed. This time, you will use `NSURLSession` to make a POST request to `http://localhost:4984/db/` with the track name and team name:
 
 	override func didSelectPost() {
 	    // This is called after the user selects Post. Do the upload of contentText and/or NSExtensionContext attachments.
@@ -191,11 +191,13 @@ Check the results in the Admin Dashboard. The document should appear in the Docu
 
 ![][image-9]
 
-**NOTE**: We could also use the Bulk endpoint to share a list of songs in one API requests. This is particularly useful in app extensions where there is limited time to perform network operations.
+**NOTE**: We could also use the [bulk docs][1] endpoint to save multiple documents in one API request. This is particularly useful in app extensions where there is limited time to perform network operations.
 
 ## Conclusion
 
-Share extensions are great for sharing data with your app and the Web. Setting up a Share Extension to fetch documents on-demand from Sync Gateway is a good way to give more context awareness to the user. You then have the choice to save the document back to Sync Gateway through the REST API or in the Couchbase Lite database also used by your iOS application, we will explore how to do in the next post!
+Share extensions are great for sharing data with your app and the Web. Setting up a Share Extension to fetch documents on-demand from Sync Gateway is a good way to give more context awareness to the user. You then have the choice to save the document back to Sync Gateway through the REST API or in the Couchbase Lite database also used by your iOS application, we will explore how to do that in the next post!
+
+[1]:	http://developer.couchbase.com/mobile/develop/references/couchbase-lite/rest-api/database/post-bulk-docs/index.html
 
 [image-1]:	http://cl.ly/image/1a3R200o2A1h/Screen_Shot_2015-06-13_at_22_27_31.png
 [image-2]:	http://cl.ly/image/2S260n2l1W2c/Screen%20Shot%202015-06-17%20at%2010.54.10.png
