@@ -7,11 +7,11 @@ _Couchbase by Example_ is a hands-on introduction to Couchbase Server, Sync Gate
 The series will cover topics such as:
 
 - New Couchbase Lite & Sync Gateway features
+- Handling Push Notifications
+- PouchDB compatibility with Sync Gateway
+- P2P applications
 - Couchbase Lite & Share Extensions on iOS
 - Couchbase Lite & Android Lollipop APIs
-- Handling Push Notifications
-- PouchDB
-- P2P
 - more...
 
 # Your suggestions
