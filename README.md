@@ -20,6 +20,6 @@ Let us know what you would like to read about. Create a [new issue][1] and start
 
 # Sharing and contributing
 
-Share the posts you found the most helpful for learning new ways of doing things. Tweet with the hashtag [^CouchbaseByExample](https://twitter.com/search?q=%23CouchbaseByExample&src=typd)
+Share the posts you found the most helpful for learning new ways of doing things. Tweet with the hashtag [CouchbaseByExample](https://twitter.com/search?q=%23CouchbaseByExample&src=typd)
 
-[1]:	https://github.com/shinobicontrols/iOS8-day-by-day/issues/new
+[1]:	https://github.com/couchbaselabs/Couchbase-by-Example/issues/new
