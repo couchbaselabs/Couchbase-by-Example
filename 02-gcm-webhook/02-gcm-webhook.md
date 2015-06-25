@@ -1,19 +1,19 @@
 # Couchbase by Example: Sync Gateway Webhooks
 
-In the previous post, you learned how to set up Google Cloud Messaging with the Service Worker and Push API to handle notifications and used PouchDB + Sync Gateway to sync registration tokens. In this tutorial, you will focus exclusively on Web Hook to dispatch the notifications to particular users.
+In the previous post, you learned how to set up Google Cloud Messaging with the Service Worker and Push API to handle notifications and used PouchDB + Sync Gateway to sync registration tokens. In this tutorial, you will focus exclusively on webhooks to dispatch the notifications to particular users.
 
-We will continue on exploring Timely News, a news application to  notify you of new articles matching your interests.
+You will continue building Timely News, a news application to notify users of new articles matching their topics of interest.
 
 ## Scenarios
 
 There are different scenarios for sending a push notification:
 
-- Group Messaging: this concept was introduced in GCM to send notifications to up to 20 devices simultaneously. It’s very well suited for sending notifications to all devices that belong to a single user
-- Up and Down: a user updated a document and other users should be notified about it through a Push Notification
+- **Group Messaging**: this concept was introduced in GCM to send notifications to up to 20 devices simultaneously. It’s very well suited for sending notifications to all devices that belong to a single user
+- **Up and Down**: a user updated a document and other users should be notified about it through a Push Notification
 
 ## Data Model
 
-Let’s start with the smallest document, a Profile document holding the registration tokens of the user’s devices and topics of interest:
+Let’s start with the smallest document, a Profile document holding registration tokens of the user’s devices and topics of interest:
 
 	{
 	    "type": "profile",
@@ -23,7 +23,7 @@ Let’s start with the smallest document, a Profile document holding the registr
 	    "registration_ids": ["AP91DIwQ", "AP91W9kX"]
 	}
 
-And the article document may have the following properties:
+And the Article document may have the following properties:
 
 	{
 	    "type": "article",
@@ -34,11 +34,15 @@ And the article document may have the following properties:
 
 ## Group Messaging
 
-Imagine a scenario where a user is currently signed up on a freemium account and inputs a invite code to access the premium plan for a limited time. It would be nice to send a notification to all the user’s devices so they can access the premium-only articles.
+Imagine a scenario where a user is currently signed up on a freemium account and inputs a invite code to access the premium plan for a limited time. It would be nice to send a notification to all the user’s devices to fetch the additional content.
 
 **Brief**: Send a one-off notification to freemium users that also have an invite code to unlock other devices.
 
-Download Sync Gateway [here][1]. You can find the Sync Gateway binary in the `bin` folder and examples of configuration files in the `examples` folder. Copy the `exampleconfig.json` file to the root of your project:
+Download the 1.1 release of Sync Gateway:
+
+> http://www.couchbase.com/nosql-databases/downloads#Couchbase_Mobile
+
+You will find the Sync Gateway binary in the `bin` folder and examples of configuration files in the `examples` folder. Copy the `exampleconfig.json` file to the root of your project:
 
 	cp ~/Downloads/couchbase-sync-gateway/examples/exampleconfig.json /path/to/proj/sync-gateway-config.json
 
@@ -89,12 +93,12 @@ Start Sync Gateway:
 Create a new file `main.go` to handle the webhook:
 
 	func main() {
-		http.HandleFunc("/invitecode", func(w http.ResponseWriter, r *http.Request) {
-			log.Println("ping")
+	    http.HandleFunc("/invitecode", func(w http.ResponseWriter, r *http.Request) {
+	        log.Println("ping")
 	
-		})
+	    })
 	
-		log.Fatal(http.ListenAndServe(":8000", nil))
+	    log.Fatal(http.ListenAndServe(":8000", nil))
 	}
   
 Start the Go server:
@@ -133,7 +137,7 @@ Add another webhook entry that filters only documents of type `article`:
 Add another handler in your Go server:
 
 	http.HandleFunc("/new_article", func(w http.ResponseWriter, r *http.Request) {
-		log.Println("ping")
+	    log.Println("ping")
 	})
 
 Check that the webhook is working as expected by adding an Article document:
@@ -168,28 +172,28 @@ Notice that the article we posted above has design in it’s topic and the only 
 Now, you can edit handler in `main.go` to subsequently query the `user_topics` view with the key being the topic of the article:
 
 	http.HandleFunc("/new_article", func(w http.ResponseWriter, r *http.Request) {
-		log.Println("ping")
+	    log.Println("ping")
 	
-		var data map[string]interface{}
-		body, _ := ioutil.ReadAll(r.Body)
-		json.Unmarshal(body, &data)
+	    var data map[string]interface{}
+	    body, _ := ioutil.ReadAll(r.Body)
+	    json.Unmarshal(body, &data)
 	
-		topic := data["topic"].(string)
-		log.Printf("Querying user Profiles subscribed to %s", topic)
+	    topic := data["topic"].(string)
+	    log.Printf("Querying user Profiles subscribed to %s", topic)
 	
-		var stringUrl string = fmt.Sprintf("http://localhost:4985/db/_design/extras/_view/user_topics?key=\"%s\"", topic)
-		res, err := http.Get(stringUrl)
-		if err != nil {
-			fmt.Print(err)
-			return
-		}
+	    var stringUrl string = fmt.Sprintf("http://localhost:4985/db/_design/extras/_view/user_topics?key=\"%s\"", topic)
+	    res, err := http.Get(stringUrl)
+	    if err != nil {
+	        fmt.Print(err)
+	        return
+	    }
 	
-		if res != nil {
-			var result map[string]interface{}
-			body, _ = ioutil.ReadAll(res.Body)
-			json.Unmarshal(body, &result)
-			log.Printf("Result from the user_topics query %v", result["rows"].([]interface {}))
-		}
+	    if res != nil {
+	        var result map[string]interface{}
+	        body, _ = ioutil.ReadAll(res.Body)
+	        json.Unmarshal(body, &result)
+	        log.Printf("Result from the user_topics query %v", result["rows"].([]interface {}))
+	    }
 	})
 
 Run the `bulk_doc` request again and you will see the list of device tokens to use in the logs:
@@ -198,12 +202,7 @@ Run the `bulk_doc` request again and you will see the list of device tokens to u
 
 ## Conclusion
 
-In this lesson, you learned how to use Web Hooks in the scenario of GCM Push Notifications and used Couchbase Server Views to access additional information at Webhook Time™.
-
-
-
-
-[1]:	http://packages.couchbase.com/builds/mobile/sync_gateway/1.1.0/1.1.0-16/couchbase-sync-gateway-community_1.1.0-16_x86_64.tar.gz
+In this tutorial, you learned how to use Web Hooks in the scenario of GCM Push Notifications and used Couchbase Server Views to access additional information at Webhook Time™.
 
 [image-1]:	http://i.gyazo.com/7ec3dd332f2d029af364590a4c2e3e63.gif
 [image-2]:	http://i.gyazo.com/b8c8731e0cbdb5b11e8c35710fe3a092.gif
