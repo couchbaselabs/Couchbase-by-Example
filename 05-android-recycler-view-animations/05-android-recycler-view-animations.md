@@ -299,11 +299,11 @@ Implement the `deletePladce` method in MainActivity:
 
 Run the app and delete items with animations:
 
-<video width="400px" src="http://cl.ly/0I1x2W3G0u22/shamuLMY47Zjamesnocentini06262015143207.mp4"></video>
+![][image-7]
 
 Use the `babel-node sync.js` again to add another set of 20 documents with attachments and notice the RecyclerView will reload without animations:
 
-	film
+![][image-8]
 
 ## Conclusion
 
@@ -337,7 +337,7 @@ And this brings us to the next section to discuss the different scenarios when t
 
 Have a look at the diagram below:
 
-![][image-7]
+![][image-9]
 
 The requirements we will follow are:
 
@@ -358,4 +358,6 @@ In the next section, you will set up the replication to handle different operati
 [image-4]:	http://cl.ly/image/2m3E2h2O0l40/shamuLMY47Zjamesnocentini06262015115529.png
 [image-5]:	http://cl.ly/image/2R211W2w1K10/shamuLMY47Zjamesnocentini06262015123903.png
 [image-6]:	http://cl.ly/image/0N3O3V371g3L/Screen%20Shot%202015-06-26%20at%2012.49.05.png
-[image-7]:	http://cl.ly/image/281j3X1m2s1j/Recycler%20View%20(1).png
+[image-7]:	http://cl.ly/image/220Y221s2h2y/Untitled.gif
+[image-8]:	http://cl.ly/image/162X0w0P1G0I/replication.gif
+[image-9]:	http://cl.ly/image/281j3X1m2s1j/Recycler%20View%20(1).png
