@@ -24,7 +24,7 @@ When we send a push notification to this registration token, Chrome will display
 
 ## Architecture considerations
 
-We can imagine a simple news application to notify users when a new article is published through Push Notifications. The Push Notification is a visual clue to let the user know that new content is available but it could also be for the application itself to pull the new articles from the server:
+We could imagine a simple news application to notify users when a new article is published through Push Notifications. The Push Notification is a visual clue to let the user know that new content is available but it could also be for the application itself to pull the new articles from the server:
 
 ![][image-2]
 
