@@ -2,11 +2,9 @@
 
 If there’s one big take away from the Android L release is that motion matters. Movement can teach a user what something can do and where it came from. By using motion we can teach users how the system behaves and what they can expect from that system.
 
-## Recycler View
+## RecyclerView
 
-Recycler View is a base for new adapter backed views. It’s hard to get any sort of rich experience with the ListView API.
-
-RecyclerView is meant to have more flexible APIs for the large datasets that you would traditionally use a ListView for. For example, you can now notify the adapter when items are specifically added, removed rather than saying "hey. my dataset changed". That way we can benefit from animations when adding, removing items to the set.
+Recycler View is a base for new adapter backed views. It has more flexible APIs for the large datasets that you would traditionally use a ListView for. For example, you can now notify the adapter when items are specifically added, removed rather than saying "hey, my dataset changed". That way we can benefit from animations when adding, removing items to the set.
 
 ## Getting Started
 
@@ -27,12 +25,6 @@ Select the `Blank Activity` template:
 Run the app and you should see the default activity and toolbar:
 
 ![][image-4]
-
-## How to write a material app?
-
-You will use the support library. It already included things like the drawer layout, view pager. In the L release, the Android UI Toolkit team added support for the RecyclerView and CardView widgets. That way, you can use the new APIs and your application and have a nice fallback on older platform versions.
-
-For apps on previous versions, use the AppCompat library which has been expanded to cover the material design components in L.
 
 ## Setting up Sync Gateway
 
@@ -70,13 +62,18 @@ In the `build.gradle`, add the reference to the design library.
 
 	compile 'com.android.support:design:22.2.0'
 
+Add the couchbase-lite-android and recycler view packages:
+
+	compile 'com.couchbase.lite:couchbase-lite-android:1.1.0'
+	compile 'com.android.support:recyclerview-v7:22.2.0'
+
 ##  Floating Action Button
 
 You will use the Floating Action Button available in the Design Support Library to remove items in the RecyclerView.
 
 Copy the [add and delete icons][1] in your project.
 
-In `main_layout.xml`, add the FAB button XML:
+Add two FABs in `main_layout.xml`:
 
 	<android.support.design.widget.FloatingActionButton
 	    android:layout_width="wrap_content"
@@ -94,10 +91,9 @@ In `main_layout.xml`, add the FAB button XML:
 	    android:layout_alignParentLeft="true"
 	    android:layout_marginBottom="16dp"
 	    android:layout_marginLeft="16dp"
-	    android:onClick="deletePlace"
 	    android:src="@drawable/ic_delete_white_24dp" />
 
-Run the app and you should see both button:
+Run the app and you should see both buttons:
 
 ![][image-5]
 
@@ -105,7 +101,7 @@ In the next section, you will set the Android app to pull those documents and di
 
 ## Replication
 
-In the `MainActivity`, add a method to register a views to index documents:
+In the `MainActivity`, add a method to register a Couchbase Lite view to index documents:
 
 	private void registerViews() {
 	    View placesView = database.getView(PLACES_VIEW);
@@ -117,7 +113,7 @@ In the `MainActivity`, add a method to register a views to index documents:
 	    }, "1");
 	}
 
-In the `onCreate` method, add some code setup the replication:
+In the `onCreate` method, add the following to setup the replication:
 
 	try {
 	    // replace with the IP to use
@@ -142,7 +138,7 @@ In the `onCreate` method, add some code setup the replication:
 
 **NOTE**: Don’t forget to replace the hostname accordingly.
 
-Run the application and you should the list of changes occurring during the replication in LogCat:
+Run the application and you should see the changes in LogCat:
 
 ![][image-6]
 
@@ -155,7 +151,7 @@ Open `activity_main.xml` and add the following inside the `LinearLayout` tag:
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent" />
 
-In `MainActivity`, add a `recyclerView` property of type `RecyclerView` and initialise in the `onCreate` method:
+In `MainActivity`, add a `recyclerView` property of type `RecyclerView` and initialise it in the `onCreate` method:
 
 	recyclerView = (RecyclerView) findViewById(R.id.list);
 	recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -164,9 +160,7 @@ In the next section, you will add the XML file that represents the UI for each r
 
 ## RecyclerView Rows
 
-Each row in the RecyclerView will have an `ImageView` and 2 `TextViews`:
-
-	wireframe
+Each row in the RecyclerView will have an `ImageView` and 2 `TextViews`.
 
 In the `res/layout` directory, create a new Layout resource file and call it `row_places.xml` and paste the following XML:
 
@@ -214,7 +208,7 @@ Add a Java class called `PlacesAdapter`. Add the constructor and implement the `
 
 You can find the content of the file [here][2].
 
-Notice that the constructor of `PlacesAdapter` takes a few arguments in addition to the context:
+Notice that the constructor of `PlacesAdapter` takes two arguments in addition to the context:
 
 - `List<Place>` dataSet: the list of documents to display on screen. Place is model class that you will create in the next section.
 - `Database` database: the database object to get the attachment and populate the `ImageView` view.
@@ -284,7 +278,9 @@ Update the database listener inner class with the following code to reload the R
 
 ## Deleting items
 
-Implement the `deletePladce` method in MainActivity:
+In `activity_main.xml`, add the on `android:onClick="deletePlace"` attribute to the delete floating action button.
+
+Implement the `deletePlace` method in MainActivity:
 
 	public void deletePlace(android.view.View view) {
 	    Log.d("", "delete me");
@@ -301,53 +297,13 @@ Run the app and delete items with animations:
 
 ![][image-7]
 
-Use the `babel-node sync.js` again to add another set of 20 documents with attachments and notice the RecyclerView will reload without animations:
+Use the `babel-node sync.js` command again to add another set of 20 documents with attachments and notice the RecyclerView will reload without animations:
 
 ![][image-8]
 
 ## Conclusion
 
-In this tutorial you learned how to use a database change listener to re-run the query backing a Recycler View. In addition, you learned to use the various RecyclerView APIs to include system level support.
-
-It would be interesting to explore further the new APIs available in the L release such Shadows to elevate your views. You can post certain views above the view hierarchy plane. More precisely, with this API, you can boost some of those views with an elevation `z` value that puts them above the plane. Coupling shadows with change notifications during a replication for example could yield a great user experience.
-
-## N.B: When to use a Live Query?
-
-A live query stays active and monitors the database and view index for changes. When there’s a change it re-runs itself automatically, and if the query results changed it notifies any observers.
-
-So you will be notified that things have changed and passed a `ChangeEvent`. The live query `ChangeEvent` object has the following getter methods:
-
-- `getSource`: returns the associated live query
-- `getError`: returns the error if any
-- `getRows`: returns the result as a `QueryEnumerator` (i.e. `Iterator<QueryRow>`)
-
-You can retrieve the new result with the `getRows` method. This method returns all the rows for that query, not only the ones that changed.
-
-To make the most out of the RecyclerView, we would like to know which item(s) were added/removed or just updated in order to use the item animator and have nice animations like below:
-
-	gif 
-
-A Live Query listens on the Database Change Listener, every time the Database Change Listener is triggered, the query will run again.
-
-However, if you want to build reactive UI with animations, we need to know which documents have changed and the database change event listener gives us this ability.
-
-And this brings us to the next section to discuss the different scenarios when the adapter should tell the RecyclerView to redraw itself.
-
-## Database Change Listener
-
-Have a look at the diagram below:
-
-![][image-9]
-
-The requirements we will follow are:
-
-- When the RecyclerView loads for the first time, all items should be animated
-- When the user makes a change, choose the appropriate RecyclerView API call to trigger the animation
-- When a document is replicated from Sync Gateway, reload the RecyclerView without animations
-
-A live query is listening on the database change listener. A `ChangeEvent` object on the database listener has very interesting properties like `external` to indicate if the change was the result of a replication or of a local CRUD operation.
-
-In the next section, you will set up the replication to handle different operations.
+In this tutorial you learned how to use a database change listener to re-run the query backing a Recycler View. In addition, you learned to use the various RecyclerView APIs to include system level support for animations.
 
 [1]:	google.com
 [2]:	http://google.com
@@ -355,9 +311,8 @@ In the next section, you will set up the replication to handle different operati
 [image-1]:	http://cl.ly/image/1S1G2b0M1k1s/Screen%20Shot%202015-06-26%20at%2011.28.42.png
 [image-2]:	http://cl.ly/image/1N0b1t3N1e1P/Screen%20Shot%202015-06-26%20at%2011.44.51.png
 [image-3]:	http://cl.ly/image/2R3y2e0e0F2j/Screen%20Shot%202015-06-26%20at%2011.45.34.png
-[image-4]:	http://cl.ly/image/2m3E2h2O0l40/shamuLMY47Zjamesnocentini06262015115529.png
-[image-5]:	http://cl.ly/image/2R211W2w1K10/shamuLMY47Zjamesnocentini06262015123903.png
+[image-4]:	http://cl.ly/image/0S3s2V1j2A1j/687474703a2f2f636c2e6c792f696d6167652f326d33453268324f306c34302f7368616d754c4d5934375a6a616d65736e6f63656e74696e6930363236323031353131353532392e706e67.png
+[image-5]:	http://cl.ly/image/1k3F2L2T2T23/shamuLMY47Zjamesnocentini06262015123903.png
 [image-6]:	http://cl.ly/image/0N3O3V371g3L/Screen%20Shot%202015-06-26%20at%2012.49.05.png
 [image-7]:	http://cl.ly/image/220Y221s2h2y/Untitled.gif
-[image-8]:	http://cl.ly/image/162X0w0P1G0I/replication.gif
-[image-9]:	http://cl.ly/image/281j3X1m2s1j/Recycler%20View%20(1).png
+[image-8]:	http://cl.ly/image/2U2S2q3V3u3D/anim.gif
