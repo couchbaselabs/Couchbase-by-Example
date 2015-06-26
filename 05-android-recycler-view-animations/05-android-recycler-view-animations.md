@@ -138,7 +138,7 @@ In the `onCreate` method, add the following to setup the replication:
 
 **NOTE**: Don’t forget to replace the hostname accordingly.
 
-Run the application and you should see the changes in LogCat:
+Run the application and you should see the replication changes in LogCat:
 
 ![][image-6]
 
@@ -210,7 +210,7 @@ You can find the content of the file [here][2].
 
 Notice that the constructor of `PlacesAdapter` takes two arguments in addition to the context:
 
-- `List<Place>` dataSet: the list of documents to display on screen. Place is model class that you will create in the next section.
+- `List<Place>` dataSet: the list of documents to display on screen. Place is a model class that you will create in the next section.
 - `Database` database: the database object to get the attachment and populate the `ImageView` view.
 
 In the next section, you will create the Place model class.
@@ -305,8 +305,8 @@ Use the `babel-node sync.js` command again to add another set of 20 documents wi
 
 In this tutorial you learned how to use a database change listener to re-run the query backing a Recycler View. In addition, you learned to use the various RecyclerView APIs to include system level support for animations.
 
-[1]:	google.com
-[2]:	http://google.com
+[1]:	https://github.com/couchbaselabs/Couchbase-by-Example/tree/master/05-android-recycler-view-animations/CityExplorer/app/src/main/res
+[2]:	https://github.com/couchbaselabs/Couchbase-by-Example/blob/master/05-android-recycler-view-animations/CityExplorer/app/src/main/java/com/couchbase/cityexplorer/PlacesAdapter.java
 
 [image-1]:	http://cl.ly/image/1S1G2b0M1k1s/Screen%20Shot%202015-06-26%20at%2011.28.42.png
 [image-2]:	http://cl.ly/image/1N0b1t3N1e1P/Screen%20Shot%202015-06-26%20at%2011.44.51.png
