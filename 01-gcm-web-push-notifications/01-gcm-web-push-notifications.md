@@ -44,9 +44,13 @@ Create a new Project called `Timely News`:
 
 Once the new project appears in the list, click on it and copy down the project number, you will need it throughout this tutorial.
 
-You will also need a Server API key to test Push Notifications are working:
+The Google Developer Console lists all the available APIs. To use a particular one, you must first activate it. Open the `APIs & auth > APIs` panel and enable the `Cloud Messaging for Android` api:
 
 ![][image-4]
+
+Finally, you will need a Server API key to test Push Notifications are working:
+
+![][image-5]
 
 Copy down the Server API key as well.
 
@@ -58,7 +62,7 @@ In this section, you will learn how to use browserify to bundle external depende
 
 Create a new file named `index.html` with the basic HTML5 template:
 
-![][image-5]
+![][image-6]
 
 Create a new file `app.js` in the `src` folder, all of the logic for Timely News will reside in `app.js`. You will use the `watchify` command to automatically bundle JS files into a `bundle.js` output file. 
 
@@ -68,7 +72,7 @@ Create a new folder called `dist` and run the command:
 
 In `index.html`,  don’t forget to add a script tag to link the `bundle.js` output file:
 
-![][image-6]
+![][image-7]
 
 ## Push API and Service Worker
 
@@ -115,7 +119,7 @@ In `app.js`, check for Service Worker support and prompt the user to get the per
 
 This will log the registration ID for this application instance to the console:
 
-![][image-7]
+![][image-8]
 
 The Push API works with a Service Worker to handle incoming notifications even when the browser tab window is closed. Create a new file named `service-worker.js` with the following event listener to handle incoming notifications:
 
@@ -146,7 +150,7 @@ With the registration ID and API Key you can send a POST request to the GCM serv
 
 Now you know how to use Web notifications in Chrome!
 
-![][image-8]
+![][image-9]
 
 You can read more about the specifics of the Push API in this great blog post:
 
@@ -192,7 +196,7 @@ Use the PouchDB Inspector to view the database content right in DevTools!
 
 > https://chrome.google.com/webstore/detail/pouchdb-inspector/hbhhpaojmpfimakffndmpmpndcmonkfa?hl=en
 
-![][image-9]
+![][image-10]
 
 In the next section, you will get Sync Gateway set up with an in-memory database (called Walrus) and the GUEST mode enabled. Then, you will use a Push replication to save the Profile document to Sync Gateway.
 
@@ -208,7 +212,7 @@ You can find the Sync Gateway binary in the `bin` folder and examples of configu
 
 Start Sync Gateway and open the Admin Dashboard on `http://localhost:4985/_admin/` to keep an eye on synced documents.
 
-![][image-10]
+![][image-11]
 
 In `app.js`, start a replication with the local "timely-news" database as source database and "http://localhost:4984/db" as the target.
 
@@ -218,7 +222,7 @@ In `app.js`, start a replication with the local "timely-news" database as source
 
 Go back to the Admin Dashboard and you should see the Profile document:
 
-![][image-11]
+![][image-12]
 
 ## Conclusion
 
@@ -227,11 +231,12 @@ Google Cloud Messaging enables us to develop once and be able to send messages t
 [image-1]:	http://cl.ly/image/253b2d0L171t/Screen_Shot_2015-06-12_at_10_14_09.png
 [image-2]:	http://cl.ly/image/1v3V1l1s1a3b/Untitled%20Diagram%20(2).png
 [image-3]:	http://i.gyazo.com/9522e9de1362af96a06b46e3c22ee1d7.gif
-[image-4]:	http://i.gyazo.com/b08ad6be05e6da8cc485ab0f160eebfd.gif
-[image-5]:	http://i.gyazo.com/7d52183f54135c3c9e3f8a32e63a48d7.gif
-[image-6]:	http://i.gyazo.com/858cab1759038b84f36000603318db4f.gif
-[image-7]:	http://cl.ly/image/1X1B3b3b0F30/Screen%20Shot%202015-06-13%20at%2016.21.28.png
-[image-8]:	http://i.gyazo.com/5e52aeec4355e7f4e7341065077f9090.gif
-[image-9]:	http://cl.ly/image/0Q1t0M361a1s/Screen%20Shot%202015-06-13%20at%2016.33.05.png
-[image-10]:	http://i.gyazo.com/37acae33dce5e3e9d4c50945f6550b51.gif
-[image-11]:	http://cl.ly/image/3L2Z2s081o1I/Screen%20Shot%202015-06-13%20at%2016.50.18.png
+[image-4]:	http://i.gyazo.com/bd7393a8ad275b88914d2562334dc31e.gif
+[image-5]:	http://i.gyazo.com/b08ad6be05e6da8cc485ab0f160eebfd.gif
+[image-6]:	http://i.gyazo.com/7d52183f54135c3c9e3f8a32e63a48d7.gif
+[image-7]:	http://i.gyazo.com/858cab1759038b84f36000603318db4f.gif
+[image-8]:	http://cl.ly/image/1X1B3b3b0F30/Screen%20Shot%202015-06-13%20at%2016.21.28.png
+[image-9]:	http://i.gyazo.com/5e52aeec4355e7f4e7341065077f9090.gif
+[image-10]:	http://cl.ly/image/0Q1t0M361a1s/Screen%20Shot%202015-06-13%20at%2016.33.05.png
+[image-11]:	http://i.gyazo.com/37acae33dce5e3e9d4c50945f6550b51.gif
+[image-12]:	http://cl.ly/image/3L2Z2s081o1I/Screen%20Shot%202015-06-13%20at%2016.50.18.png
