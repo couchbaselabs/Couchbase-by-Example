@@ -1,0 +1,64 @@
+{
+  "log": ["*"],
+  "databases": {
+    "db": {
+      "server": "walrus:",
+      "users": {
+        "jens": {
+          "admin_roles": ["level-1"],
+          "password": "letmein"
+        },
+        "andy": {
+          "admin_roles": ["level-2"],
+          "password": "letmein"
+        },
+        "william": {
+          "admin_roles": [],
+          "password": "letmein"
+        },
+        "traun": {
+          "admin_roles": ["level-3"],
+          "password": "letmein"
+        }
+      },
+      "roles": {
+        "level-1": {},
+        "level-2": {},
+        "level-3": {}
+      },
+      "sync": `function(doc, oldDoc) {
+if (doc.type == "restaurant") {
+requireRole("moderator")
+channel(doc.restaurant_id);
+} else if (doc.type == "comment") {
+switch(doc.role) {
+case "level-1":
+// write access
+requireRole(doc.role);
+channel(doc.owner + "-in-review");
+
+// read access
+access(doc.owner, doc.owner + "-in-review");
+access("role:level-3", doc.owner + "-in-review");
+
+break;
+case "level-2":
+// write access
+requireRole(doc.role);
+channel(doc.restaurant_id);
+break;
+case "level-3":
+requireRole("beginner");
+channel(doc.restaurant_id);
+break;
+}
+} else if (doc.type == "profile") {
+requireRole("level-3");
+role(doc.name, "role:" + doc.role);
+}
+}`
+    }
+  }
+}
+
+
