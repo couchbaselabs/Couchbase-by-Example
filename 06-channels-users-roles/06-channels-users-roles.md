@@ -98,26 +98,25 @@ With roles, you don't need to assign every single user to a channel. You simply 
 
 With that in mind, replace the sync function in `sync-gateway-config.json`:
 
-```
+```javascript
 function(doc, oldDoc) {
   if (doc.type == "restaurant"){
-    requireRole("moderator")
     channel(doc.restaurant_id);
   } else if (doc.type == "review") {
     switch(doc.role) {
-      case "level-1": // write access
-      requireRole(doc.role);
-      channel(doc.owner + "-in-review");
-      // read access
-      access(doc.owner, doc.owner + "-in-review");
-      access("role:level-3", doc.owner + "-in-review");
-      break;
-    case "level-2": // write access
+      case "level-1": // Step 1
+        requireRole(doc.role);
+        var channelname = doc.owner + "-in-review";
+        channel(channelname);
+        access(doc.owner, channelname);
+        access("role:level-3", channelname);
+        break;
+    case "level-2": // Step 2
       requireRole(doc.role);
       channel(doc.restaurant_id);
       break;
-    case "level-3":
-      requireRole("level-3");
+    case "level-3": // Step 3
+      requireRole(doc.role);
       channel(doc.restaurant_id);
       break;
     }
