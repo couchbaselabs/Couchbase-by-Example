@@ -80,12 +80,39 @@ Push the files to a github repository.
 
 Specify the url to the production config file in the docker command to run the Sync Gateway container:
 
-
-
-Next, install Sync Gateway using the Docker image and the configuration file from the `04-ios-sync-progress` app:
-
 ```bash
-$ docker run -p 4984:4984 -p 4985:4985 couchbase/sync-gateway http://git.io/vfQpe
+$ docker run -d -p 4984:4984 -p 4985:4985 couchbase/sync-gateway http://git.io/vq25r
+```
+
+**NOTE**: You ran `docker run` but this time specified the `-d` flag. It tells Docker to run the container and put it in the background, to daemonize it.
+
+Run the `docker ps` command to check that both containers are running:
+
+```
+root@MyApp:~# docker ps
+CONTAINER ID        IMAGE                    COMMAND                CREATED             STATUS              PORTS                                                                           NAMES
+ca7d4358941a        couchbase/sync-gateway   "/usr/local/bin/sync   2 minutes ago       Up 2 minutes        0.0.0.0:4984-4985->4984-4985/tcp                                                focused_bell
+c9411d002831        couchbase/server         "couchbase-start cou   52 minutes ago      Up 52 minutes       8092/tcp, 11207/tcp, 11210-11211/tcp, 0.0.0.0:8091->8091/tcp, 18091-18092/tcp   grave_feynman
+```
+
+Use the `docker logs` command specifying the container id to print the stdout to your console.
+
+**TIP**: Use the `-f` flag to flow the logs.
+
+In the next section, you write a simple Dockerfile to deploy the NodeJS application.
+
+## Deploying an App Server
+
+Open a new file named `Dockerfile` and paste the following:
+
+```
+FROM ubuntu: 14.04
+
+// install nodejs
+
+// install dependencies
+
+// start the sync script on demand
 ```
 
 Let's first pull down an existing image and run it in a new container. To do this, run:
