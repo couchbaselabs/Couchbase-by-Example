@@ -1,0 +1,11 @@
+{
+  "log": ["*"],
+  "databases": {
+    "db": {
+      "server": "http://46.101.14.135:8091/",
+      "bucket": "default",
+      "users": { "GUEST": { "disabled": false, "admin_channels": ["*"] } }
+    }
+  }
+}
+
