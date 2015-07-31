@@ -46,4 +46,5 @@ public class WelcomeActivity extends Activity {
         Intent intent = new Intent(this, SignUp.class);
         startActivity(intent);
     }
+
 }
