@@ -453,7 +453,7 @@ public void login(View view) {
 
 Run the app and login with the user name and password that you previously chose. If the authentication was successfull, you will get back a 200 OK status code:
 
-![](http://cl.ly/image/2x0j1Q0j0i2P/Screen%20Shot%202015-07-31%20at%2009.49.36.png)
+![](http://cl.ly/image/433W1U3w1w2z/Screen_Shot_2015-07-31_at_09_49_36.png)
 
 ## Conclusion
 
