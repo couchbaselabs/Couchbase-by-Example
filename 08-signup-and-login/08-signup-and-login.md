@@ -1,6 +1,6 @@
 # Couchbase by Example: Sign up and Login
 
-With the Sync Gateway API, you can create users and authenticate on the client side as a specific user to replicate the data this user has access to. There are two ways to create users:
+With the Sync Gateway API, you can authenticate on the client side as a specific user to replicate the data this user has access to. In the case of basic authentication, the user must already exist in the Sync Gateway database. There are two ways to create users:
 
 - In the configuration file under the `users` field.
 - On the Admin REST API.
@@ -17,7 +17,7 @@ Download Sync Gateway and unzip the file:
 
 > http://www.couchbase.com/nosql-databases/downloads#Couchbase\_Mobile
 
-For this tutorial, you won't need a configuration file. For basic config properties, you can use the command line options. The binary to run is located in `~/Downloads/couchbase-sync-gateway/bin/`. Run the program with the `--help` to see the list of available options:
+For this tutorial, you won't need a configuration file. For basic config properties, you can use the command line options. The binary to run is located in `~/Downloads/couchbase-sync-gateway/bin/`. Run the program with the `--help` flag to see the list of available options:
 
 ```bash
 ~/Downloads/couchbase-sync-gateway/bin/sync_gateway --help
@@ -68,7 +68,7 @@ All of the Couchbase Mobile SDKs have a method to specify a user's name and pass
 
 ## App Server
 
-In this section, you'll use the necessary Admin REST API endpoints publicly to allow users to sign up through the app.
+In this section, you'll use the necessary Admin REST API endpoint publicly to allow users to sign up through the app.
 
 You'll use the `http-proxy` NodeJS module to proxy request to the Sync Gateway.
 
@@ -130,7 +130,7 @@ From now on, you can use one url to create users and perform all other operation
 
 > http://localhost:8000
 
-Create another user to test the everything is working as expected:
+Create another user to test that everything is working as expected:
 
 ```bash
 $ curl -vX POST -H 'Content-Type: application/json' \
@@ -146,13 +146,11 @@ $ curl -vX POST -H 'Content-Type: application/json' \
        :8000/smarthome/_session
 ```
 
-In the next section, you will create an simple Android app with a login and signup screen to test those endpoint.
+In the next section, you will create a simple Android app with a login and signup screen to test those endpoints.
 
 ## Android app
 
-Open Android Studio and select **Start a new Android Studio project** from the **Quick Start** menu:
-
-
+Open Android Studio and select **Start a new Android Studio project** from the **Quick Start** menu.
 
 Name the app **SmartHome**, set an appropriate company domain and project location, and then click **Next**:
 
@@ -168,17 +166,17 @@ On the subsequent **Add an activity to Mobile** dialog, select Add **Blank Activ
 
 To build the signup and login functionalities you will use two dependencies:
 
-- Android Design Support Library: to have input text components that follow the Material Design spec.
-- OkHttp: to handle the POST requests to `/signup` and `/smarthome/_session`. 
+- **Android Design Support Library**: to have input text components that follow the Material Design spec.
+- **OkHttp**: to handle the POST requests to `/signup` and `/smarthome/_session`. 
 
-In `build.gradle`, add the reference to the design library:
+In `build.gradle`, add those dependencies:
 
 ```
 compile 'com.android.support:design:22.2.1'
 compile 'com.squareup.okhttp:okhttp:2.3.0'
 ```
 
-In `activity_welcome.xml`, add the following LinearLayout inside of the existing RelativeLayout:
+In `activity_welcome.xml`, add the following **LinearLayout** inside of the existing **RelativeLayout**:
 
 ```xml
 <LinearLayout
@@ -203,11 +201,11 @@ In `activity_welcome.xml`, add the following LinearLayout inside of the existing
 </LinearLayout>
 ```
 
-Notice that both buttons have an `onClick` attribute. Move the mose cursor on one of the methods and use the `alt + enter` > `Create openLoginActivity(view)` in `WelcomeActivity`:
+Notice that both buttons have an `onClick` attribute. Move the mouse cursor on one of the methods and use the `alt + enter` > `Create openLoginActivity(view)` shortcut to create that method in `WelcomeActivity`:
 
 ![](http://i.gyazo.com/7dc646192986cac8e1823b4088028f32.gif)
 
-Do the same for the Sign Up button.
+Do the same for the **Sign Up** button.
 
 Next, create two new classes and XML layouts using the **Blank Activity** template. One should be called `Login` and the other `SignUp`:
 
@@ -231,7 +229,7 @@ Change the parent class of `Login.java` and `SignUp.java` from `AppCompatActivit
 
 In `res/values/styles.xml (v21)`, change the parent theme to `Theme.AppCompat.Light.DarkActionBar`.
 
-Open `activity_sign_up.xml` and add the following inside of the RelativeLayout tag:
+Open `activity_sign_up.xml` and add the following inside of the **RelativeLayout** tag:
 
 ```xml
 <LinearLayout
@@ -311,13 +309,13 @@ Call post(String url, String json, Callback callback) {
 }
 ```
 
-Before you can make request in your Android app, you first need to add the **Network** permission in `AndroidManifest.xml`:
+Before you can make HTTP request in your Android app, you first need to add the **Network** permission in `AndroidManifest.xml`:
 
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
 ```
 
-Now back `SignUp.java`, add the following properties:
+Now back in `SignUp.java`, add the following properties:
 
 ```java
 NetworkHelper networkHelper = new NetworkHelper();
@@ -365,13 +363,13 @@ public void signup(View view) {
 }
 ```
 
-Run the app and provide a name and password. If the user account was successfully created you will get back a `201 Created` status code and should see the newly created user on Admin Dashboard:
+Run the app and enter a name and password. If the user account was successfully created you will get back a `201 Created` status code and should see the newly created user on the Admin Dashboard:
 
 ![](http://cl.ly/image/03102s0u181x/Screen%20Shot%202015-07-31%20at%2009.50.42.png)
 
-Finally, let's finish off with the Login screen. In `activity_login.xml`, add the following in RelativeLayout:
+Finally, let's finish off with the Login screen. In `activity_login.xml`, add the following in **RelativeLayout**:
 
-```java
+```xml
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -414,6 +412,7 @@ Add the properties to `Login.java`:
 
 ```java
 NetworkHelper networkHelper = new NetworkHelper();
+
 EditText nameInput;
 EditText passwordInput;
 ```
@@ -455,6 +454,8 @@ Run the app and login with the user name and password that you previously chose.
 
 ![](http://cl.ly/image/05350m1U0l09/Screen_Shot_2015-07-31_at_09_49_36.png)
 
+**NOTE:** All of the Couchbase Lite SDKs have a method on the `Replication` object that takes a name and password and performs the authentication for you so you will likely not have to make that POST request to `/smarthome/_session`.
+
 ## Conclusion
 
-In this tutorial, you learnt how to use the Admin REST API to create users and authenticate with Android SDK against Sync Gateway.
+In this tutorial, you learnt how to use the Admin REST API to create users through a Sign Up screen in an Android app.
