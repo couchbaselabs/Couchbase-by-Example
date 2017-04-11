@@ -29,7 +29,7 @@ Choose Ubuntu for the distribution and on the Applications tab, select Docker. C
 In the command line, install Couchbase Server with the following:
 
 ```
-docker run -d -p 8091:8091 couchbase/server
+docker run -d --name db -p 8091-8094:8091-8094 -p 11210:11210 couchbase
 ```
 
 Open the getting started wizard in Chrome on port `http://<host>:8091`:
