@@ -5,7 +5,7 @@
   "main": "requestRx.js",
   "dependencies": {
     "rx": "~2.5.3",
-    "request": "~2.58.0"
+    "request": "~2.88.2"
   },
   "devDependencies": {},
   "scripts": {
