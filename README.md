@@ -1,3 +1,5 @@
+⚠️ This repo is obsolete.  It was developed using a version of Couchbase Lite that reached end of life years ago.
+
 # Couchbase by Example
 
 _Couchbase by Example_ is a hands-on introduction to Couchbase Server, Sync Gateway and Couchbase Lite. Each tutorial aims to cover the new APIs on a specific platform (iOS, Android, .NET, Web). In each folder, you will find the source code and a markdown file accompanying the sample application to build it from scratch or just walkthrough the important code snippets.
